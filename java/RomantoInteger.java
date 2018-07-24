@@ -13,9 +13,10 @@ class RomantoInteger {
             if (toNumber(s.charAt(i)) > toNumber(s.charAt(i - 1))) {
                 result += toNumber(s.charAt(i)) - 2 * toNumber(s.charAt(i - 1));
             } else {
-                res += toNumber(s.charAt(i));
+                result += toNumber(s.charAt(i));
             }
         }
+        return result;
     }
 
     public static int toNumber(char c) {
