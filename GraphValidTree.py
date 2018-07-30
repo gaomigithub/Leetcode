@@ -18,15 +18,29 @@ class Solution(object):
         :type edges: List[List[int]]
         :rtype: bool
         """
+
+        # It must have those numbers of edges as a tree
         if len(edges) != n-1:
             return False
+            
+        # for example
+        # 3 -> 0 -> 1 -> 4
+        #      ↓
+        #      2
 
+        # build hashtable:
+        # {3: 0}
+        # {0: 1,2,3}
+        # {1: 0,4}
+        # {2: 0}
+        # {4: 1}
         neighbors = {i:[] for i in range(n)}
 
         for v, w in edges:
             neighbors[v].append(w)
             neighbors[w].append(v)
 
+        # BFS, put 0 in the queue first, then pop queue in the neighbors
         queue = [0]
         while queue:
             queue.extend(neighbors.pop(queue.pop(0), []))
