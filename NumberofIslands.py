@@ -20,7 +20,7 @@
 
 # Output: 3
 
-# DFS
+# DFS - 1
 # 我们遍历矩阵的每一个点，对每个点都尝试进行一次深度优先搜索，如果搜索到1，就继续向它的四周搜索。
 # 同时我们每找到一个1，就将其标为0，
 # 这样就能把整个岛屿变成0。我们只要记录对矩阵遍历时能进入多少次搜索，就代表有多少个岛屿。
@@ -55,6 +55,31 @@ class Solution:
         if y != col - 1:
             self.dfs(grid, row, col, x, y + 1)
 
+# DFS - 2
+class Solution:
+    # @param grid, a list of list of characters
+    # @return an integer
+    def numIslands(self, grid):
+        if not grid or not grid[0]:return 0
+        m,n=len(grid),len(grid[0])
+        vis = [[False for j in range(n)]for i in range(m)]
+        self.dx,self.dy=[1,-1,0,0],[0,0,1,-1]
+        ans = 0 
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j]=='1' and not vis[i][j]:
+                    vis[i][j]=True
+                    self.dfs(i,j,grid,vis)
+                    ans+=1
+        return ans
+ 
+    def dfs(self,x,y,grid,vis):
+        for k in range(4):
+            nx,ny=x+self.dx[k],y+self.dy[k]
+            if nx<0 or ny<0 or nx >=len(grid) or ny>=len(grid[0])\
+            or grid[nx][ny]=='0' or vis[nx][ny]: continue
+            vis[nx][ny]=True
+            self.dfs(nx,ny,grid,vis)
 
 # BFS
 class Solution2:
@@ -87,3 +112,10 @@ class Solution2:
 
     def isValid(self, np, m, n):
         return np[0] >= 0 and np[0] < m and np[1] >= 0 and np[1] < n
+
+
+# Follow Up
+# Q:如何找湖的数量呢？湖的定义是某个0，其上下左右都是同一个岛屿的陆地。
+# A:我们可以先用Number of island的方法，把每个岛标记成不同的ID，然后过一遍整个地图的每个点，
+#   如果是0的话，就DFS看这块连通水域是否被同一块岛屿包围，如果出现了不同数字的陆地，则不是湖。
+
