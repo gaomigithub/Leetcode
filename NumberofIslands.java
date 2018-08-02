@@ -179,6 +179,10 @@ class UnionFind {
     }
 }
 
+// 采用了一种比较新的方法写 Union Find
+// 利用一个counter来记录 独立部分的个数
+// ids[id] = i * col + j + 1;
+
 // 作者：Richardo92
 // 链接：https://www.jianshu.com/p/7765566537ef
 // 來源：简书
