@@ -69,6 +69,122 @@ class NumberofIslands {
     }
 }
 
+
+// Union find or called Disjoint Set
+// 重点就是记住， find 的时候呢需要 compress path
+// 然后多用一个size数组，当两个树merge的时候，小树得merge into 大树
+
+// Anyway, Good luck, Richardo! -- 09/09/2016
+
+public class Solution {
+    private int row = 0;
+    private int col = 0;
+    private int[][] dir = new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) {
+            return 0;
+        }
+        this.row = grid.length;
+        this.col = grid[0].length;
+        UnionFind uf = new UnionFind(this.row, this.col);
+        
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (grid[i][j] == '1') {
+                    int id = uf.add(i, j);
+                    for (int k = 0; k < 4; k++) {
+                        int next_x = i + dir[k][0];
+                        int next_y = j + dir[k][1];
+                        if (check(next_x, next_y) && grid[next_x][next_y] == '1') {
+                            int next_id = uf.find(next_x, next_y);
+                            if (next_id > 0) {
+                                uf.union(i, j, next_x, next_y);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return uf.counter;
+    }
+    
+    private boolean check(int i, int j) {
+        if (i < 0 || i >= row || j < 0 || j >= col) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+}
+
+class UnionFind {
+    int[] ids;
+    int[] sz;
+    int row;
+    int col;
+    int counter;
+    UnionFind(int row, int col) {
+        this.row = row;
+        this.col = col;
+        ids = new int[row * col + 1];
+        sz = new int[row * col + 1];
+        counter = 0;
+    }
+    
+    int add(int i, int j) {
+        int id = getId(i, j);
+        ids[id] = id;
+        counter++;
+        return id;
+    }
+    
+    int find(int i, int j) {
+        return find(getId(i, j));
+    }
+    
+    int find(int id) {
+        if (ids[id] == id) {
+            return id;
+        }
+        else {
+            int ret = find(ids[id]);
+            ids[id] = ret;
+            return ret;
+        }
+    }
+
+    void union(int i1, int j1, int i2, int j2) {
+        int id1 = find(i1, j1);
+        int id2 = find(i2, j2);
+        if (id1 == id2) {
+            return;
+        }
+        else {
+            counter--;
+            if (sz[id1] > sz[id2]) {
+                ids[id2] = id1;
+                sz[id1] += sz[id2];
+            }
+            else {
+                ids[id1] = id2;
+                sz[id2] += sz[id1];
+            }
+        }
+    }
+    
+    int getId(int i, int j) {
+        return i * col + j + 1;
+    }
+}
+
+// 作者：Richardo92
+// 链接：https://www.jianshu.com/p/7765566537ef
+// 來源：简书
+// 简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
+
+
 // 后续 Follow Up
 // Q:如何找湖的数量呢？湖的定义是某个0，其上下左右都是同一个岛屿的陆地。
 // A:我们可以先用Number of island的方法，把每个岛标记成不同的ID，然后过一遍整个地图的每个点，如果是0的话，就DFS看这块连通水域是否被同一块岛屿包围，如果出现了不同数字的陆地，则不是湖。
