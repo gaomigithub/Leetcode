@@ -22,8 +22,9 @@
 
 
 
-// Author: Huahua
+// Binary Search
 // Runtime: 170 ms
+// Time: O(nlogn), Space: O(n)
 class MyCalendar {
     TreeMap<Integer, Integer> booked_;
     public MyCalendar() {
@@ -31,12 +32,18 @@ class MyCalendar {
     }
     
     public boolean book(int start, int end) {
-        Integer lb = booked_.floorKey(start);
-        if (lb != null && booked_.get(lb) > start) return false;
-        Integer ub = booked_.ceilingKey(start);
+        Integer lb = booked_.floorKey(start); // return LARGEST entry whose key <= query key 
+        if (lb != null && booked_.get(lb) > start) return false; // overlap
+        Integer ub = booked_.ceilingKey(start); // return SMALLEST entry whose key > query key
         if (ub != null && ub < end) return false;
  
         booked_.put(start, end);
         return true;
     }
 }
+
+/**
+ * Your MyCalendar object will be instantiated and called as such:
+ * MyCalendar obj = new MyCalendar();
+ * boolean param_1 = obj.book(start,end);
+ */
