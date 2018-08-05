@@ -15,6 +15,17 @@
 # S will consist only of letters or digits.
 
 """
+ASCII:
+Upper case A-Z: 65 - 90
+Lower case a-z: 97 - 122
+'a' - 'Z' = 32
+"""
+
+# Solution: DFS
+# Time complexity: O(n*2^l), l = # of letters in the string
+# Space complexity: O(n) + O(n*2^l)
+
+"""
 Author: Huahua
 Running time: 92 ms
 """
