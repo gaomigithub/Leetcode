@@ -28,7 +28,8 @@
 # 代码中由变量is_forward来表示从哪一端转换。
 # 现在是要求所有最少转换次数的转换方法，所以要将所有的转换可能都找出来。如图中bit和him转换为bim的转换关系我们都要找出来。
 # 我们还需要记录转换的路径，我们将从上一层到下一层的转换关系记录下来，等到确定能够转换成功了，再通过深度优先遍历的方法将转换路径组装起来。
-# BFS
+
+# DFS
 class Solution(object):
     def findLadders(self, beginWord, endWord, wordList):
         """
