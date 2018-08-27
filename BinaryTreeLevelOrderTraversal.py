@@ -48,3 +48,33 @@ class Solution(object):
             result.append(level_result)
             curr_level = next_level
         return result
+
+
+# 类型：BFS
+# Time Complexity O(n)
+# Space Complexity O(n)
+
+
+# BFS的题解思路。
+
+# 这里new_q也可以命名成next_level，同样q可以命名为cur_level，但因为太长，我选择放弃。
+
+# 通过一个temp的数组new_q来存储下一层的node，
+# 每次迭代完成后，把temp数组的node更新到q里面用于下一次迭代，并存储至res
+
+class Solution(object):
+    def levelOrder(self, root):
+        res = []
+        if not root: 
+            return res
+        q = [root]
+        while q :
+            res.append([node.val for node in q])
+            new_q = []
+            for node in q:
+                if node.left:
+                    new_q.append(node.left)
+                if node.right:
+                    new_q.append(node.right)
+            q = new_q
+        return res

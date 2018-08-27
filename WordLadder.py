@@ -10,6 +10,39 @@
 # You may assume no duplicates in the word list.
 # You may assume beginWord and endWord are non-empty and are not the same.
 
+# 此题是参考了 《南郭子綦》 的思路。 
+
+#     解题思路：这道题使用bfs来解决。参考：http://chaoren.is-programmer.com/posts/43039.html 使用BFS, 单词和length一块记录, dict中每个单词只能用一次, 所以用过即删。
+#     dict给的是set类型, 检查一个单词在不在其中(word in dict)为O(1)时间。设单词长度为L, dict里有N个单词, 
+#     每次扫一遍dict判断每个单词是否与当前单词只差一个字母的时间复杂度是O(N*L), 而每次变换当前单词的一个字母, 看变换出的词是否在dict中的时间复杂度是O(26*L), 所以要选择后者。
+
+# 采用了bfs的方式，每次改变单词中的一个字符，并判断生成的单词是否在wordlist中，直到生成目标单词，或者无法再继续下去。
+
+class Solution(object):
+    def ladderLength(self, beginWord, endWord, wordList):
+        """
+        :type beginWord: str
+        :type endWord: str
+        :type wordList: List[str]
+        :rtype: int
+        """
+        wordList = set(wordList) #avoid TLE
+        q = [(beginWord,1)]
+        while q:
+            word, lens = q.pop(0)
+            if word = endWord:
+                return lens
+            
+            for i in range(len(word)):
+                left = word[:i]
+                right = word[i+1:]
+                for c in 'abcdefghigklmnopqrstuvwxyz':
+                    nextWord = left + c + right
+                    if nextWord in wordList:
+                        q.append(nextWord,lens + 1)
+                        wordList.remove(nextWord)
+        return 0
+
 # 1.我们把起始字符串当成根节点，如果在变化过程中，某一个节点是目标字符串，那么就找到了一条变化路径。
 # 2.节点所在的高度能够反映出变化到该节点时经历了几次变化，如hot在根节点的下一层，表示变化了一次，hut和bot在更下一层，表示变化了两次。
 # 3.在树上层出现过的字符串没必要在下层再次出现，因为如果该字符串是转换过程中必须经过的中间字符串，那么应该挑选上层的该字符串继续进行变化，它的转换次数少。
@@ -51,4 +84,32 @@ class Solution(object):
             depth += 1
             cur_level = next_level
             next_level = []
+        return 0
+
+# 类型：BFS
+# Time Complexity O(n26^len) -> O(n26^len/2)
+# Space Complexity O(n)
+
+# 每次只要对word里面任意字母进行更改以后，就将其放回queue里面。
+# 对于是否访问这个问题，我的写法是写一个visted的set来统计，LC里面有一种直接删除wordList里面访问过的词，想法雷同。
+# 至于记录深度，可以利用python里面tuple的小技巧，每次迭代的时候对tuple里面的计量单位增值即可:
+# q.append((new_word, length + 1))
+# 最后一点就是开头的arr = set(arr) 用来解决TLE，LC里面有些特别大的重复List很尴尬。
+class Solution(object):
+    def ladderLength(self, start, end, arr):
+        arr = set(arr) #avoid TLE
+        q = collections.deque([(start, 1)])
+        visted = set()
+        alpha = string.ascii_lowercase  #'abcd...z'
+        while q:
+            word, length = q.popleft()
+            if word == end:
+                return length
+            
+            for i in range(len(word)):
+                for ch in alpha:
+                    new_word = word[:i] + ch + word[i+1:]
+                    if new_word in arr and new_word not in visted:
+                        q.append((new_word, length + 1))
+                        visted.add(new_word)
         return 0

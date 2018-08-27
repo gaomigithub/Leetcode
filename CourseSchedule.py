@@ -60,4 +60,41 @@ class Solution(object):
                         zero.append(n)
 
         return len(graph) == 0 and sum(indegree) == 0
+
+
+# 类型：BFS
+# Time Complexity O(n)
+# Space Complexity O(n)
+
+# Topological Sorting题
+# 首先构建一个图，因为题目没有提供。
+# 然后创建一个入度数组。
+# 把入度数组里面为0的课丢进Queue，表示这门课无需Pre-req，然后对这门课的所有邻居的入度减1。更新完邻居的入度后，如果发现邻居里面有入度为0，则将其丢进Queue继续迭代。
+class Solution(object):
+    def canFinish(self, n, edges):
+        from collections import deque
+        in_degrees = [0 for i in range(n)]   #入度记录一门课需要上几个pre_req
+        graph = {i: set() for i in range(n)}   #画一幅图
+
+        # 构建图以及入度
+        for i, j in edges:
+            in_degrees[i] += 1  
+            graph[j].add(i) 
+
+        # 如果课没有pre_req，扔到Queue里
+        q = deque()
+        for i, pre_req in enumerate(in_degrees):    
+            if not pre_req:
+                q.append(i)
+
+        # 进行BFS操作
+        visited = 0
+        while q:
+            node = q.popleft()
+            visited += 1
+            for neigh in graph[node]:
+                in_degrees[neigh] -= 1
+                if in_degrees[neigh] == 0:
+                    q.append(neigh)
+        return visited == n
         
