@@ -1,0 +1,14 @@
+1. BTree
+
+2. Graph： BFS, DFS
+  WordSearch, WordLadder
+  
+3. 类DP的BFS: Partition Equal Subset Sum, 先DFS再DP
+ 
+4. Array处理
+
+5. 垃圾处理
+
+6. Thread，线程安全的Hashmap，定义
+
+7. LinkedList, SlidingWindow
